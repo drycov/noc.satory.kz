@@ -190,15 +190,13 @@ services:
   oxidized:
     restart: always
     image: docker.io/oxidized/oxidized:latest
-    # ports:
-    #   - 8888:8888/tcp
     networks:
       - back-tier
     environment:
-      # Reload hosts list once per day
       CONFIG_RELOAD_INTERVAL: 86400
     volumes:
-       - ./db/oxidized-config/config:/home/oxidized/.config/oxidized/
+      - ./oxidized-config/config:/home/oxidized/.config/oxidized/
+      - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
 
   
   # GRAFANA

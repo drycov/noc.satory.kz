@@ -1,0 +1,5 @@
+Host *
+    Port 44333
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+    LogLevel ERROR
