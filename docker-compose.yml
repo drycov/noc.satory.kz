@@ -32,7 +32,7 @@ services:
       - "MYSQL_USER=${LNMS_USER}"
       - "MYSQL_PASSWORD=${LNMS_PASSWORD}"
     volumes:
-      - "./db/librenms:/var/lib/mysql"
+      - "./db/mysql/librenms:/var/lib/mysql"
     restart: always
     networks:
       - back-tier
@@ -53,7 +53,7 @@ services:
       - "MYSQL_USER=${PHPIPAM_USER}"
       - "MYSQL_PASSWORD=${PHPIPAM_PASSWORD}"
     volumes:
-      - "./db/phpipam:/var/lib/mysql"
+      - "./db/mysql/phpipam:/var/lib/mysql"
     restart: always
     networks:
       - back-tier
@@ -174,7 +174,7 @@ services:
       environment:
         - TZ=Asia/Almaty
         - IPAM_DATABASE_HOST=phpipam-db
-        - IPAM_DATABASE_PASS=${PHPIPAM_PASSWORD}
+        - IPAM_DATABASE_PASS=${PHPIPAM_PASSWORD}ls
         - SCAN_INTERVAL=1h
       restart: unless-stopped
       volumes:
