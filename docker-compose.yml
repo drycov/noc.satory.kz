@@ -18,7 +18,7 @@ services:
 
   librenms-db:
     image: mariadb:10
-    container_name: librenms_db
+    container_name: librenms-db
     command:
       - "mysqld"
       - "--innodb-file-per-table=1"
@@ -37,7 +37,7 @@ services:
 
   phpipam-db:
     image: mariadb:10
-    container_name: phpipam_db
+    container_name: phpipam-db
     env_file:
       - ./phpipam_db/.env
     environment:
@@ -59,18 +59,18 @@ services:
     networks:
       - back-tier
 
-  redis:
+  librenms-redis:
     image: redis:7.2-alpine
-    container_name: librenms_redis
+    container_name: librenms-redis
     environment:
       - "TZ=${TZ}"
     restart: always
     networks:
       - back-tier
 
-  msmtpd:
+  librenms-msmtpd:
     image: crazymax/msmtpd:latest
-    container_name: librenms_msmtpd
+    container_name: librenms-msmtpd
     env_file:
       - "./msmtpd/.env"
     restart: always
@@ -106,9 +106,9 @@ services:
       - back-tier
       - satory_net
 
-  dispatcher:
+  librenms-dispatcher:
     image: librenms/librenms:latest
-    container_name: librenms_dispatcher
+    container_name: librenms-dispatcher
     hostname: librenms-dispatcher
     cap_add:
       - NET_ADMIN
