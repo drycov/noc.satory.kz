@@ -59,18 +59,18 @@ services:
     networks:
       - back-tier
 
-  librenms-redis:
+  redis:
     image: redis:7.2-alpine
-    container_name: librenms-redis
+    container_name: redis
     environment:
       - "TZ=${TZ}"
     restart: always
     networks:
       - back-tier
 
-  librenms-msmtpd:
+  msmtpd:
     image: crazymax/msmtpd:latest
-    container_name: librenms-msmtpd
+    container_name: msmtpd
     env_file:
       - "./msmtpd/.env"
     restart: always
