@@ -196,6 +196,8 @@ services:
       - back-tier
     environment:
       CONFIG_RELOAD_INTERVAL: 86400
+    ports:
+      - 8888:8888
     volumes:
       - ./oxidized-config/config:/home/oxidized/.config/oxidized/
       - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
