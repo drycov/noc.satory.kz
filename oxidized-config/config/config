@@ -56,7 +56,7 @@ source:
       model: os                     # поле OS → модель Oxidized
       group: group                  # если используете группы в LibreNMS
     headers:
-      X-Auth-Token: "fac6a7a3b9840173f591d33510094134"   # ← обязательно!
+      X-Auth-Token: "4081abcc56d722123aec2fd1b3febe0a"   # ← обязательно!
     # scheme: http                # если https → scheme: https + secure: false (если self-signed)
 model_map:
   juniper: junos
