@@ -1,0 +1,298 @@
+name: satory
+ 
+# ======================================================================
+# NETWORKS
+# ======================================================================
+networks:
+  satory_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: satory0
+
+  back-tier:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: backend0
+
+services:
+
+  librenms-db:
+    image: mariadb:10
+    container_name: librenms_db
+    command:
+      - "mysqld"
+      - "--innodb-file-per-table=1"
+      - "--lower-case-table-names=1"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    env_file:
+      - ./librenms_db/.env
+    environment:
+      - "TZ=${TZ}"
+    volumes:
+      - "./db/librenms:/var/lib/mysql"
+    restart: always
+    networks:
+      - back-tier
+
+  phpipam-db:
+    image: mariadb:10
+    container_name: phpipam_db
+    env_file:
+      - ./phpipam_db/.env
+    environment:
+      - "TZ=${TZ}"
+    volumes:
+      - "./db/phpipam:/var/lib/mysql"
+    restart: always
+    networks:
+      - back-tier
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      - "TZ=${TZ}"
+    networks:
+      - back-tier
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: librenms_redis
+    environment:
+      - "TZ=${TZ}"
+    restart: always
+    networks:
+      - back-tier
+
+  msmtpd:
+    image: crazymax/msmtpd:latest
+    container_name: librenms_msmtpd
+    env_file:
+      - "./msmtpd/.env"
+    restart: always
+    networks:
+      - back-tier
+
+  librenms-web:
+    image: librenms/librenms:latest
+    container_name: librenms-web
+    hostname: librenms-web
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    depends_on:
+      - librenms-db
+      - redis
+      - msmtpd
+    volumes:
+      - "./db/librenms:/data"
+    env_file:
+      - "./librenms/.env"
+    environment:
+      - "TZ=${TZ}"
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "DB_HOST=librenms-db"
+      - "DB_NAME=${L_MYSQL_DATABASE}"
+      - "DB_USER=${L_MYSQL_USER}"
+      - "DB_PASSWORD=${L_MYSQL_PASSWORD}"
+      - "DB_TIMEOUT=60"
+    restart: always
+    networks:
+      - back-tier
+      - satory_net
+  dispatcher:
+    image: librenms/librenms:latest
+    container_name: librenms_dispatcher
+    hostname: librenms-dispatcher
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    depends_on:
+      - librenms-web
+      - redis
+    volumes:
+      - "./db/librenms:/data"
+    env_file:
+      - "./librenms/.env"
+    environment:
+      - "TZ=${TZ}"
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "DB_HOST=librenms-db"
+      - "DB_NAME=${L_MYSQL_DATABASE}"
+      - "DB_USER=${L_MYSQL_USER}"
+      - "DB_PASSWORD=${L_MYSQL_PASSWORD}"
+      - "DB_TIMEOUT=60"
+      - "DISPATCHER_NODE_ID=dispatcher1"
+      - "SIDECAR_DISPATCHER=1"
+    restart: always
+    networks:
+      - back-tier
+      - satory_net
+      # --------------------------------------------------------------------
+
+  phpipam-web:
+      image: phpipam/phpipam-www:latest
+      container_name: phpipam-web
+      environment:
+        - TZ=Asia/Almaty
+        - IPAM_DATABASE_HOST=phpipam-db
+        - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+        - IPAM_DATABASE_WEBHOST=%
+      restart: unless-stopped
+      volumes:
+        - phpipam-logo:/phpipam/css/images/logo
+        - phpipam-ca:/usr/local/share/ca-certificates:ro
+      networks:
+      - back-tier
+      - satory_net
+      depends_on:
+        - phpipam-db
+      cap_add:
+        - NET_ADMIN
+        - NET_RAW
+
+  phpipam-cron:
+      image: phpipam/phpipam-cron:latest
+      container_name: phpipam-cron
+      environment:
+        - TZ=Asia/Almaty
+        - IPAM_DATABASE_HOST=phpipam-db
+        - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+        - SCAN_INTERVAL=1h
+      restart: unless-stopped
+      volumes:
+        - phpipam-ca:/usr/local/share/ca-certificates:ro
+      networks:
+        - back-tier
+      depends_on:
+        - phpipam-db
+      cap_add:
+        - NET_ADMIN
+        - NET_RAW
+
+  
+  # GRAFANA
+  # --------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      - back-tier
+      - satory_net
+    environment:
+      - TZ=Asia/Almaty
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=StrongGrafanaPass
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=https://grafana.satory.kz/
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/login"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  # --------------------------------------------------------------------
+  # PROMETHEUS
+  # --------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    networks:
+      - back-tier
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./db/prometheus:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # --------------------------------------------------------------------
+  # SNMP EXPORTER
+  # --------------------------------------------------------------------
+  snmp-exporter:
+    image: prom/snmp-exporter:latest
+    container_name: snmp-exporter
+    restart: unless-stopped
+    ports:
+      - 9116:9116
+    networks:
+      - back-tier
+    volumes:
+      - ./prometheus/snmp.yml:/etc/snmp_exporter/snmp.yml:ro
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9116/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"  # HTTP API для Grafana
+    networks:
+      - back-tier
+    volumes:
+      - ./db/loki:/loki
+    command:
+      - "-config.file=/etc/loki/local-config.yaml"
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: promtail
+    restart: unless-stopped
+    networks:
+      - back-tier
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log:/var/log:ro
+      - ./promtail/config.yml:/etc/promtail/config.yml:ro
+    command:
+      - "-config.file=/etc/promtail/config.yml"
+
+
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: satory-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - satory_net
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./db/nginx/logs:/var/log/nginx
+    environment:
+      - "TZ=${TZ}"
+    depends_on:
+      # - oxidized
+      - librenms-web
+      - phpipam-web
+      - grafana
+  
+
+volumes:
+  phpipam-logo:
+  phpipam-ca:
+  loki-data:

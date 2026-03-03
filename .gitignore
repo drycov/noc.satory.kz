@@ -1,0 +1,62 @@
+# Основные игнорируемые файлы и папки для Docker, Grafana, Prometheus, LibreNMS, PHPIPAM
+# Логи, временные файлы, базы данных, кэш, выходные файлы
+
+# Docker
+*.log
+*.pid
+*.sock
+
+# VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js
+node_modules/
+
+db/
+
+
+
+
+# Grafana
+csv/
+pdf/
+png/
+
+# DB
+*.ibd
+*.frm
+*.MYD
+*.MYI
+*.log
+*.info
+*.opt
+
+# Nginx
+nginx/logs/
+
+# Общие
+*.sqlite3
+*.db
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# Секреты и сертификаты
+nginx/certs/
+*.pem
+*.crt
+*.key
+
+# Системные
+.DS_Store
+Thumbs.db
+
+# Исключения
+!docker-compose.yml
