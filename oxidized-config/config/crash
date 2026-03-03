@@ -1,0 +1,28 @@
+--------------------------------------------------
+2026-03-03 16:32:06 UTC
+no implicit conversion of String into Integer [TypeError]
+--------------------------------------------------
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/source.rb:76:in `block in string_navigate_object'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/source.rb:75:in `each'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/source.rb:75:in `string_navigate_object'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/jsonfile.rb:45:in `block (2 levels) in transform_json'
+/var/lib/gems/3.3.0/gems/asetus-0.4.0/lib/asetus/configstruct.rb:18:in `each'
+/var/lib/gems/3.3.0/gems/asetus-0.4.0/lib/asetus/configstruct.rb:18:in `each'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/jsonfile.rb:44:in `block in transform_json'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/jsonfile.rb:39:in `each'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/jsonfile.rb:39:in `transform_json'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/source/http.rb:40:in `load'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/nodes.rb:18:in `block in load'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/nodes.rb:151:in `synchronize'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/nodes.rb:151:in `with_lock'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/nodes.rb:13:in `load'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/nodes.rb:146:in `initialize'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/core.rb:16:in `new'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/core.rb:16:in `initialize'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/core.rb:4:in `new'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/core.rb:4:in `new'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/lib/oxidized/cli.rb:17:in `run'
+/var/lib/gems/3.3.0/gems/oxidized-0.35.0/bin/oxidized:5:in `<top (required)>'
+/usr/local/bin/oxidized:25:in `load'
+/usr/local/bin/oxidized:25:in `<main>'
+--------------------------------------------------

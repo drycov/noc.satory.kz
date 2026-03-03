@@ -189,6 +189,8 @@ services:
 
   oxidized:
     restart: always
+    container_name: oxidized
+
     image: docker.io/oxidized/oxidized:latest
     networks:
       - back-tier
