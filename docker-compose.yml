@@ -91,7 +91,7 @@ services:
     volumes:
       - "./db/librenms:/data"
     env_file:
-      - "./librenms/.env"
+      - "./librenms_db/librenms.env"
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
@@ -118,7 +118,7 @@ services:
     volumes:
       - "./db/librenms:/data"
     env_file:
-      - "./librenms/.env"
+      - "./librenms_db/librenms.env"
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
