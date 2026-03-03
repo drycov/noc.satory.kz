@@ -25,10 +25,12 @@ services:
       - "--lower-case-table-names=1"
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
-    env_file:
-      - ./librenms_db/.env
     environment:
       - "TZ=${TZ}"
+      - "MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}"
+      - "MYSQL_DATABASE=${LNMS_DATABASE}"
+      - "MYSQL_USER=${LNMS_USER}"
+      - "MYSQL_PASSWORD=${LNMS_PASSWORD}"
     volumes:
       - "./db/librenms:/var/lib/mysql"
     restart: always
@@ -38,10 +40,18 @@ services:
   phpipam-db:
     image: mariadb:10
     container_name: phpipam-db
-    env_file:
-      - ./phpipam_db/.env
+    command:
+      - "mysqld"
+      - "--innodb-file-per-table=1"
+      - "--lower-case-table-names=1"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
     environment:
       - "TZ=${TZ}"
+      - "MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}"
+      - "MYSQL_DATABASE=${PHPIPAM_DATABASE}"
+      - "MYSQL_USER=${PHPIPAM_USER}"
+      - "MYSQL_PASSWORD=${PHPIPAM_PASSWORD}"
     volumes:
       - "./db/phpipam:/var/lib/mysql"
     restart: always
@@ -91,15 +101,15 @@ services:
     volumes:
       - "./db/librenms:/data"
     env_file:
-      - "./librenms_db/librenms.env"
+      - "./librenms/librenms.env"
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
       - "PGID=${PGID}"
       - "DB_HOST=librenms-db"
-      - "DB_NAME=${L_MYSQL_DATABASE}"
-      - "DB_USER=${L_MYSQL_USER}"
-      - "DB_PASSWORD=${L_MYSQL_PASSWORD}"
+      - "DB_NAME=${LNMS_DATABASE}"
+      - "DB_USER=${LNMS_USER}"
+      - "DB_PASSWORD=${LNMS_PASSWORD}"
       - "DB_TIMEOUT=60"
     restart: always
     networks:
@@ -119,15 +129,15 @@ services:
     volumes:
       - "./db/librenms:/data"
     env_file:
-      - "./librenms_db/librenms.env"
+      - "./librenms/librenms.env"
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
       - "PGID=${PGID}"
       - "DB_HOST=librenms-db"
-      - "DB_NAME=${L_MYSQL_DATABASE}"
-      - "DB_USER=${L_MYSQL_USER}"
-      - "DB_PASSWORD=${L_MYSQL_PASSWORD}"
+      - "DB_NAME=${LNMS_DATABASE}"
+      - "DB_USER=${LNMS_USER}"
+      - "DB_PASSWORD=${LNMS_PASSWORD}"
       - "DB_TIMEOUT=60"
       - "DISPATCHER_NODE_ID=dispatcher1"
       - "SIDECAR_DISPATCHER=1"
@@ -143,7 +153,7 @@ services:
       environment:
         - TZ=Asia/Almaty
         - IPAM_DATABASE_HOST=phpipam-db
-        - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+        - IPAM_DATABASE_PASS=${PHPIPAM_PASSWORD}
         - IPAM_DATABASE_WEBHOST=%
       restart: unless-stopped
       volumes:
@@ -164,7 +174,7 @@ services:
       environment:
         - TZ=Asia/Almaty
         - IPAM_DATABASE_HOST=phpipam-db
-        - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+        - IPAM_DATABASE_PASS=${PHPIPAM_PASSWORD}
         - SCAN_INTERVAL=1h
       restart: unless-stopped
       volumes:
