@@ -105,6 +105,7 @@ services:
     networks:
       - back-tier
       - satory_net
+
   dispatcher:
     image: librenms/librenms:latest
     container_name: librenms_dispatcher
