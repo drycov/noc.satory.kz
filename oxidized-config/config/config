@@ -45,6 +45,7 @@ output:
   default: file
   file:
     directory: "/home/oxidized/.config/oxidized/configs"
+    
 source:
   default: http                     # ← вот главное изменение
   debug: true   # ← включите на время отладки, потом можно убрать
@@ -55,7 +56,7 @@ source:
       model: os                     # поле OS → модель Oxidized
       group: group                  # если используете группы в LibreNMS
     headers:
-      X-Auth-Token: "ваш_api_token_из_librenms_сюда"   # ← обязательно!
+      X-Auth-Token: "fac6a7a3b9840173f591d33510094134"   # ← обязательно!
     # scheme: http                # если https → scheme: https + secure: false (если self-signed)
 model_map:
   juniper: junos
