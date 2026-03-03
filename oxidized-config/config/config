@@ -21,7 +21,8 @@ pid: "/home/oxidized/.config/oxidized/pid"
 extensions:
   oxidized-web:
     load: true
-    listen: 0.0.0.0:8888  # Binds to all interfaces on port 8888
+    listen: '[::]'
+     # Binds to all interfaces on port 8888
     # Optional: configure authentication
     # username: your_api_user
     # password: your_api_password
@@ -59,6 +60,9 @@ source:
       X-Auth-Token: "4081abcc56d722123aec2fd1b3febe0a"   # ← обязательно!
     # scheme: http                # если https → scheme: https + secure: false (если self-signed)
 model_map:
-  juniper: junos
-  cisco: ios
+  mikrotik: routeros
   ros: routeros
+  routeros: routeros
+  proxmox: noop        # ← добавь эту строку (noop = ничего не бэкапить)
+  cisco: ios
+  juniper: junos
