@@ -218,7 +218,7 @@ services:
       - GF_SERVER_ROOT_URL=https://grafana.satory.kz/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
-      - ./data/grafana:/var/lib/grafana
+      - ./db/grafana:/var/lib/grafana
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/login"]
       interval: 30s
