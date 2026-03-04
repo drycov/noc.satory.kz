@@ -35,9 +35,11 @@ input:
   default: ssh, telnet
   debug: false
   ssh:
+    ssh_no_keepalive: true
     secure: false
-    port: 44333
+    ssh_port: 44333
     kex: diffie-hellman-group14-sha1
+
 
   ftp:
     passive: true
