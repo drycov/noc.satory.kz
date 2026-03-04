@@ -199,9 +199,10 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ./oxidized-config:/home/oxidized/.config/oxidized:rw
-      # - ./db/oxidized:/home/oxidized/.config/oxidized:rw
-      # - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
+      - oxidized_data:/home/oxidized/.config/oxidized
+      - ./oxidized-config/config:/home/oxidized/.config/oxidized/config:ro
+      - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
+
 
   
   # GRAFANA
@@ -325,3 +326,4 @@ volumes:
   phpipam-logo:
   phpipam-ca:
   loki-data:
+  oxidized_data:
