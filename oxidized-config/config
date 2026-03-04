@@ -43,7 +43,7 @@ input:
     ssh_no_keepalive: true
     secure: false
     ssh_port: 44333
-    kex: diffie-hellman-group14-sha1
+    # kex: diffie-hellman-group14-sha1
   utf8_encoded: true
 output:
   default: git
