@@ -3,8 +3,8 @@ username: oxidized
 password: nbJll2sQKtOE08pH
 model: routeros
 log: ~/.config/oxidized/log
-debug: false
-resolve_dns: true
+debug: true
+resolve_dns: false
 interval: 3600
 run_once: false
 threads: 30
@@ -38,7 +38,7 @@ crash:
   hostnames: false
 input:
   default: ssh
-  debug: false
+  debug: true
   ssh:
     ssh_no_keepalive: true
     secure: false
