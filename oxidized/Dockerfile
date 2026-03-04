@@ -8,10 +8,13 @@ RUN groupadd -g 30000 -r oxidized && \
 
 # Установить необходимые пакеты
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  build-essential ruby ruby-dev git openssh-client ca-certificates \
-  pkg-config libffi-dev libyaml-dev zlib1g-dev libssl-dev libssh2-1-dev \
-  libsqlite3-dev libicu-dev libzstd-dev g++ curl && \
-  rm -rf /var/lib/apt/lists/*
+    git openssh-client bash ca-certificates curl \
+    build-essential pkg-config g++ \
+    cmake \
+    libgit2-dev \
+    libffi-dev libyaml-dev zlib1g-dev libssl-dev libssh2-1-dev \
+    libsqlite3-dev libicu-dev libzstd-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/oxidized
 
