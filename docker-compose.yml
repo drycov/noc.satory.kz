@@ -188,19 +188,17 @@ services:
         - NET_RAW
 
   oxidized:
-    restart: always
-    container_name: oxidized
-    user: "1000:1000"
     image: docker.io/oxidized/oxidized:latest
-    networks:
-      - back-tier
+    container_name: oxidized
+    restart: always
+    networks: [back-tier]
+    ports:
+      - "8888:8888"
     environment:
       CONFIG_RELOAD_INTERVAL: 86400
-    ports:
-      - 8888:8888
     volumes:
+      - oxidized_data:/home/oxidized/.config/oxidized
       - ./oxidized-config/config:/home/oxidized/.config/oxidized/config:ro
-      # - ./db/oxidized:/home/oxidized/.config/oxidized/.data:rw
       - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
 
 
