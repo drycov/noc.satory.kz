@@ -8,6 +8,7 @@ RUN groupadd -g 30000 -r oxidized && \
 
 # Установить необходимые пакеты
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ruby ruby-dev \
     git openssh-client bash ca-certificates curl \
     build-essential pkg-config g++ \
     cmake \
