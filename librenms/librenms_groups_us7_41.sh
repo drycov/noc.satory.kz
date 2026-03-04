@@ -3,7 +3,7 @@ set -euo pipefail
 
 URL="${LIBRENMS_URL:?set LIBRENMS_URL}"
 TOKEN="${LIBRENMS_TOKEN:?set LIBRENMS_TOKEN}"
-START="${START_US:-7}"
+START="${START_US:-6}"
 END="${END_US:-41}"
 
 api() {
@@ -16,6 +16,7 @@ api() {
     "$URL$path" "$@"
 }
 
+# один раз получаем список групп
 GROUPS_JSON="$(api GET /api/v0/devicegroups)"
 
 group_exists() {
@@ -27,26 +28,19 @@ for i in $(seq "$START" "$END"); do
   NAME="US$i"
   REGEX="^us${i}_[^0-9]"
 
+  # rules как JSON-строка (обрати внимание на экранирование кавычек)
+  RULES_STR=$(printf '{"condition":"AND","rules":[{"id":"devices.sysName","field":"devices.sysName","type":"string","input":"text","operator":"regex","value":"%s"}],"valid":true}' "$REGEX")
+
   PAYLOAD=$(cat <<JSON
 {
   "name": "$NAME",
-  "type": "dynamic",
   "desc": null,
-  "rules": {
-    "condition": "AND",
-    "rules": [
-      {
-        "id": "devices.sysName",
-        "field": "devices.sysName",
-        "type": "string",
-        "input": "text",
-        "operator": "regex",
-        "value": "$REGEX"
-      }
-    ],
-    "valid": true,
-    "joins": []
-  }
+  "type": "dynamic",
+  "rules": $(python3 - <<PY
+import json
+print(json.dumps("""$RULES_STR"""))
+PY
+)
 }
 JSON
 )
@@ -55,7 +49,7 @@ JSON
     echo "SKIP (exists) $NAME"
   else
     echo "CREATE $NAME -> $REGEX"
-    api POST /api/v0/devicegroups -d "$PAYLOAD" >/dev/null
+    api POST /api/v0/devicegroups --data-raw "$PAYLOAD" >/dev/null
   fi
 done
 
