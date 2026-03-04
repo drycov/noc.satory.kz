@@ -199,8 +199,8 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - oxidized_data:/home/oxidized/.config/oxidized
       - ./oxidized-config/config:/home/oxidized/.config/oxidized/config:ro
+      - ./db/oxidized:/home/oxidized/.config/oxidized/.data:rw
       - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
 
 
