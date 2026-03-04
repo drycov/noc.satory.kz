@@ -50,7 +50,7 @@ output:
   git:
       user: Oxidized
       email: oxidized@example.com
-      repo: "~/.config/oxidized/oxidized.git"
+      repo: "/home/oxidized/.config/oxidized/oxidized.git"
 source:
   default: http                     # ← вот главное изменение
   debug: true   # ← включите на время отладки, потом можно убрать
