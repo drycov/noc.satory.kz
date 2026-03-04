@@ -190,7 +190,7 @@ services:
   oxidized:
     restart: always
     container_name: oxidized
-
+    user: "1000:1000"
     image: docker.io/oxidized/oxidized:latest
     networks:
       - back-tier
@@ -199,9 +199,9 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ./oxidized-config/config:/home/oxidized/.config/oxidized/config:ro
-      - ./db/oxidized:/home/oxidized/.config/oxidized:rw
-      - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
+      - ./oxidized-config:/home/oxidized/.config/oxidized:rw
+      # - ./db/oxidized:/home/oxidized/.config/oxidized:rw
+      # - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
 
   
   # GRAFANA
