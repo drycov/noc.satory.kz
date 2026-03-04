@@ -15,7 +15,7 @@ retries: 3
 prompt: !ruby/regexp /^([\w.@-]+[#>]\s?)$/
 next_adds_job: false
 crash:
-  directory: ~/.config/oxidized/crashes
+  directory: "/root/.config/oxidized/crashes"
   hostnames: false
 vars: {}
 groups: 
@@ -24,7 +24,7 @@ groups:
       password: nbJll2sQKtOE08pH
 group_map: {}
 models: {}
-pid: "/home/oxidized/.config/oxidized/pid"
+pid: "/root/.config/oxidized/pid"
 extensions:
   oxidized-web:
     load: true
@@ -34,7 +34,7 @@ extensions:
     # username: your_api_user
     # password: your_api_password
 crash:
-  directory: "/home/oxidized/.config/oxidized/crashes"
+  directory: "/root/.config/oxidized/crashes"
   hostnames: false
 input:
   default: ssh
@@ -50,7 +50,7 @@ output:
   git:
       user: Oxidized
       email: oxidized@example.com
-      repo: "/home/oxidized/.config/oxidized/oxidized.git"
+      repo: "/root/.config/oxidized/oxidized.git"
 source:
   default: http                     # ← вот главное изменение
   debug: true   # ← включите на время отладки, потом можно убрать
