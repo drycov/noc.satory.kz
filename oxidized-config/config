@@ -14,7 +14,10 @@ retries: 3
 prompt: !ruby/regexp /^([\w.@-]+[#>]\s?)$/
 next_adds_job: false
 vars: {}
-groups: {}
+groups: 
+    satory:
+      username: oxidized
+      password: nbJll2sQKtOE08pH
 group_map: {}
 models: {}
 pid: "/home/oxidized/.config/oxidized/pid"
@@ -22,7 +25,7 @@ extensions:
   oxidized-web:
     load: true
     listen: '[::]'
-     # Binds to all interfaces on port 8888
+    # Binds to all interfaces on port 8888
     # Optional: configure authentication
     # username: your_api_user
     # password: your_api_password
