@@ -199,7 +199,7 @@ services:
     volumes:
       - oxidized_data:/home/oxidized/.config/oxidized
       - ./oxidized-config/config:/home/oxidized/.config/oxidized/config:ro
-      - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
+      # - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
 
 
   
