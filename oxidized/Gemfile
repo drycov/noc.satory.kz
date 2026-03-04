@@ -1,8 +1,7 @@
 source "https://rubygems.org"
 
-gem "oxidized", "~> 0.30"
-gem "oxidized-script"
-gem "oxidized-web", "~> 0.13"
-gem "oxidized-source-http"
-gem "oxidized-source-sql"
-gem "oxidized-source-librenms"
+gem "oxidized", "~> 0.35.0"
+gem "oxidized-script", "~> 0.7.0"
+gem "oxidized-web", "~> 0.18.1"
+gem "oxidized-fetch", "~> 0.2.0"
+gem "oxidized-ssh", "~> 0.2"

@@ -199,8 +199,8 @@ services:
       CONFIG_RELOAD_INTERVAL: 86400
     volumes:
       # - ./config:/root/.config/oxidized
-      - ./db/oxidized:/opt/oxidized/configs.git
-      # - oxidized_data:/root/.config/oxidized
+      # - ./db/oxidized:/opt/oxidized/configs.git
+      - oxidized_data:/root/.config/oxidized
       # - ./oxidized-config/config:/root/.config/oxidized/config:ro
       # - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
 

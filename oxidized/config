@@ -2,7 +2,7 @@
 username: oxidized
 password: nbJll2sQKtOE08pH
 model: routeros
-log: ~/.config/oxidized/log
+log: /home/oxidized/.config/oxidized/log
 debug: true
 resolve_dns: false
 interval: 3600
@@ -15,27 +15,20 @@ retries: 3
 prompt: !ruby/regexp /^([\w.@-]+[#>]\s?)$/
 next_adds_job: false
 crash:
-  directory: "/root/.config/oxidized/crashes"
+  directory: "/home/oxidized/.config/oxidized/crashes"
   hostnames: false
 vars: {}
-groups: 
-    satory:
-      username: oxidized
-      password: nbJll2sQKtOE08pH
+groups:
+  satory:
+    username: oxidized
+    password: nbJll2sQKtOE08pH
 group_map: {}
 models: {}
-pid: "/root/.config/oxidized/pid"
+pid: "/home/oxidized/.config/oxidized/pid"
 extensions:
   oxidized-web:
     load: true
     listen: '[::]'
-    # Binds to all interfaces on port 8888
-    # Optional: configure authentication
-    # username: your_api_user
-    # password: your_api_password
-crash:
-  directory: "/root/.config/oxidized/crashes"
-  hostnames: false
 input:
   default: ssh
   debug: true
@@ -48,25 +41,24 @@ input:
 output:
   default: git
   git:
-      user: Oxidized
-      email: oxidized@example.com
-      repo: "/root/.config/oxidized/oxidized.git"
+    user: Oxidized
+    email: oxidized@example.com
+    repo: "/home/oxidized/.config/oxidized/oxidized.git"
 source:
-  default: http                     # ← вот главное изменение
-  debug: true   # ← включите на время отладки, потом можно убрать
+  default: http
+  debug: true
   http:
-    url: http://librenms-web:8000/api/v0/oxidized   # ← адрес вашего LibreNMS-контейнера
+    url: http://librenms-web:8000/api/v0/oxidized
     map:
-      name: hostname                # поле из LibreNMS → имя устройства
-      model: os                     # поле OS → модель Oxidized
-      group: group                  # если используете группы в LibreNMS
+      name: hostname
+      model: os
+      group: group
     headers:
-      X-Auth-Token: "4081abcc56d722123aec2fd1b3febe0a"   # ← обязательно!
-    # scheme: http                # если https → scheme: https + secure: false (если self-signed)
+      X-Auth-Token: "4081abcc56d722123aec2fd1b3febe0a"
 model_map:
   mikrotik: routeros
   ros: routeros
   routeros: routeros
-  proxmox: noop        # ← добавь эту строку (noop = ничего не бэкапить)
+  proxmox: noop
   cisco: ios
   juniper: junos
