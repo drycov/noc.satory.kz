@@ -2,9 +2,10 @@
 username: oxidized
 password: nbJll2sQKtOE08pH
 model: routeros
+log: ~/.config/oxidized/log
+debug: false
 resolve_dns: true
 interval: 3600
-debug: false
 run_once: false
 threads: 30
 use_max_threads: false
@@ -13,6 +14,9 @@ timelimit: 300
 retries: 3
 prompt: !ruby/regexp /^([\w.@-]+[#>]\s?)$/
 next_adds_job: false
+crash:
+  directory: ~/.config/oxidized/crashes
+  hostnames: false
 vars: {}
 groups: 
     satory:
@@ -32,26 +36,21 @@ extensions:
 crash:
   directory: "/home/oxidized/.config/oxidized/crashes"
   hostnames: false
-stats:
-  history_size: 10
 input:
-  default: ssh, telnet
+  default: ssh
   debug: false
   ssh:
     ssh_no_keepalive: true
     secure: false
     ssh_port: 44333
     kex: diffie-hellman-group14-sha1
-
-
-  ftp:
-    passive: true
   utf8_encoded: true
 output:
-  default: file
-  file:
-    directory: "/home/oxidized/.config/oxidized/configs"
-    
+  default: git
+  git:
+      user: Oxidized
+      email: oxidized@example.com
+      repo: "~/.config/oxidized/oxidized.git"
 source:
   default: http                     # ← вот главное изменение
   debug: true   # ← включите на время отладки, потом можно убрать
