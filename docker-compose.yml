@@ -391,6 +391,7 @@ services:
       - phpipam-web
       - grafana
       - oxidized
+      - graylog
   
 
 volumes:
