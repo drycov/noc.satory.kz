@@ -289,7 +289,7 @@ services:
     networks:
       - back-tier
     volumes:
-      - ./db/loki:/loki
+      - loki-data:/loki
     command:
       - "-config.file=/etc/loki/local-config.yaml"
 
