@@ -362,9 +362,9 @@ services:
       - satory_net
     ports:
       - "9000:9000"   # Web UI
-      - "514:514"   # Syslog
-      - "1514:1514" # Syslog
-      - "12201:12201" # GELF
+      - "514:514/udp"   # Syslog
+      - "1514:1514/udp" # Syslog
+      - "12201:12201/udp" # GELF
     environment:
       - "TZ=${TZ}"
 
