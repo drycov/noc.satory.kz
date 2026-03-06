@@ -324,7 +324,9 @@ services:
       - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
       - DISABLE_SECURITY_PLUGIN=true
     volumes:
-      - ./db/opensearch:/usr/share/opensearch/data
+      - opensearch_data:/usr/share/opensearch/data
+    # volumes:
+    #   - ./db/opensearch:/usr/share/opensearch/data
     ulimits:
       memlock:
         soft: -1
