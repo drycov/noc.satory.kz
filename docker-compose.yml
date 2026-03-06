@@ -397,3 +397,5 @@ volumes:
   loki-data:
   oxidized_data:
   graylog_data:
+  opensearch_data:
+  grafana_data:
