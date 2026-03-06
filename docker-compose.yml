@@ -363,7 +363,8 @@ services:
       # веб
       - GRAYLOG_HTTP_EXTERNAL_URI=http://graylog.satory.kz/
     volumes:
-      - ./db/graylog:/usr/share/graylog/data
+      - graylog_data:/usr/share/graylog/data
+
 
   nginx:
     image: nginx:1.25-alpine
@@ -393,3 +394,4 @@ volumes:
   phpipam-ca:
   loki-data:
   oxidized_data:
+  graylog_data:
