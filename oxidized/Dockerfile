@@ -29,4 +29,4 @@ EXPOSE 8888
 
 USER oxidized
 
-ENTRYPOINT ["/home/oxidized/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/home/oxidized/entrypoint.sh"]

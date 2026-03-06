@@ -7,20 +7,19 @@ SSH_DIR="/home/oxidized/.ssh"
 mkdir -p "$CONFIG_DIR"
 mkdir -p "$SSH_DIR"
 
-# config обязателен
 if [ -f /home/oxidized/config ]; then
   cp /home/oxidized/config "$CONFIG_DIR/config"
 fi
 
-# router.db может быть либо в образе, либо примонтирован в CONFIG_DIR
 if [ -f /home/oxidized/router.db ]; then
   cp /home/oxidized/router.db "$CONFIG_DIR/router.db"
 fi
 
-# ssh config опционально
-if [ -f /home/oxidized/ssh_config ]; then
-  cp /home/oxidized/ssh_config "$SSH_DIR/config"
+if [ -f /home/oxidized/ssh/config ]; then
+  cp /home/oxidized/ssh/config "$SSH_DIR/config"
 fi
 
-# Запуск через bundler: гарантирует наличие бинаря
+chmod 700 "$SSH_DIR" || true
+chmod 600 "$SSH_DIR/config" 2>/dev/null || true
+
 exec bundle exec oxidized
