@@ -213,7 +213,7 @@ services:
       - back-tier
       - satory_net
     environment:
-      - TZ=Asia/Almaty
+      - "TZ=${TZ}"
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=StrongGrafanaPass
       - GF_USERS_ALLOW_SIGN_UP=false
@@ -221,6 +221,11 @@ services:
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
       - ./db/grafana:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - snmp-exporter
+      - loki
+      - graylog
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/login"]
       interval: 30s
@@ -235,6 +240,8 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     restart: unless-stopped
+    environment:
+      - "TZ=${TZ}"
     networks:
       - back-tier
     volumes:
@@ -261,6 +268,8 @@ services:
       - 9116:9116
     networks:
       - back-tier
+    environment:
+      - "TZ=${TZ}"
     volumes:
       - ./prometheus/snmp.yml:/etc/snmp_exporter/snmp.yml:ro
     healthcheck:
@@ -275,6 +284,8 @@ services:
     restart: unless-stopped
     ports:
       - "3100:3100"  # HTTP API для Grafana
+    environment:
+      - "TZ=${TZ}"
     networks:
       - back-tier
     volumes:
@@ -286,6 +297,8 @@ services:
     image: grafana/promtail:2.9.0
     container_name: promtail
     restart: unless-stopped
+    environment:
+      - "TZ=${TZ}"
     networks:
       - back-tier
     volumes:
@@ -307,7 +320,8 @@ services:
     volumes:
       - ./db/mongo:/data/db
     environment:
-      - TZ=Asia/Almaty
+      - "TZ=${TZ}"
+
 
   # --------------------------------------------------------------------
   # OPENSEARCH (Graylog storage)
@@ -319,6 +333,7 @@ services:
     networks:
       - back-tier
     environment:
+      - "TZ=${TZ}"
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
@@ -347,10 +362,11 @@ services:
       - satory_net
     ports:
       - "9000:9000"   # Web UI
-      - "1514:1514/udp" # Syslog
-      - "12201:12201/udp" # GELF
+      - "514:514"   # Syslog
+      - "1514:1514" # Syslog
+      - "12201:12201" # GELF
     environment:
-      - TZ=Asia/Almaty
+      - "TZ=${TZ}"
 
       # пароль admin
       - GRAYLOG_ROOT_PASSWORD_SHA2=2a920668afcc74fafc330442f30845ac4b626888da090a399dc487382671ae81
