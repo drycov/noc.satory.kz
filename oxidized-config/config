@@ -1,0 +1,64 @@
+---
+username: oxidized
+password: nbJll2sQKtOE08pH
+model: routeros
+log: /home/oxidized/.config/oxidized/log
+debug: true
+resolve_dns: false
+interval: 3600
+run_once: false
+threads: 30
+use_max_threads: false
+timeout: 20
+timelimit: 300
+retries: 3
+prompt: !ruby/regexp /^([\w.@-]+[#>]\s?)$/
+next_adds_job: false
+crash:
+  directory: "/home/oxidized/.config/oxidized/crashes"
+  hostnames: false
+vars: {}
+groups:
+  satory:
+    username: oxidized
+    password: nbJll2sQKtOE08pH
+group_map: {}
+models: {}
+pid: "/home/oxidized/.config/oxidized/pid"
+extensions:
+  oxidized-web:
+    load: true
+    listen: '[::]'
+input:
+  default: ssh
+  debug: true
+  ssh:
+    ssh_no_keepalive: true
+    secure: false
+    ssh_port: 44333
+    # kex: diffie-hellman-group14-sha1
+  utf8_encoded: true
+output:
+  default: git
+  git:
+    user: Oxidized
+    email: oxidized@example.com
+    repo: "/home/oxidized/.config/oxidized/oxidized.git"
+source:
+  default: http
+  debug: true
+  http:
+    url: http://librenms-web:8000/api/v0/oxidized
+    map:
+      name: hostname
+      model: os
+      group: group
+    headers:
+      X-Auth-Token: "4081abcc56d722123aec2fd1b3febe0a"
+model_map:
+  mikrotik: routeros
+  ros: routeros
+  routeros: routeros
+  proxmox: noop
+  cisco: ios
+  juniper: junos

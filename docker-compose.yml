@@ -189,21 +189,16 @@ services:
 
   oxidized:
     image: docker.io/oxidized/oxidized:latest
-    # build: ./oxidized
     container_name: oxidized
     restart: always
-    networks: [back-tier]
+    networks:
+      - back-tier
     ports:
       - "8888:8888"
     environment:
       CONFIG_RELOAD_INTERVAL: 86400
     volumes:
-      # - ./config:/root/.config/oxidized
-      # - ./db/oxidized:/opt/oxidized/configs.git
-      - oxidized_data:/root/.config/oxidized
-      - ./oxidized-config/config:/home/oxidized/.config/oxidized/config:ro
-      # - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
-
+      - ./oxidized-config:/home/oxidized/.config/oxidized
 
   
   # GRAFANA
@@ -212,6 +207,8 @@ services:
     image: grafana/grafana-oss:latest
     container_name: grafana
     restart: unless-stopped
+    user: "0:0"
+
     networks:
       - back-tier
       - satory_net
