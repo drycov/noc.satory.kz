@@ -298,7 +298,75 @@ services:
     command:
       - "-config.file=/etc/promtail/config.yml"
 
+# --------------------------------------------------------------------
+  # MONGODB (Graylog metadata)
+  # --------------------------------------------------------------------
+  mongodb:
+    image: mongo:6
+    container_name: graylog-mongo
+    restart: unless-stopped
+    networks:
+      - back-tier
+    volumes:
+      - ./db/mongo:/data/db
+    environment:
+      - TZ=Asia/Almaty
 
+  # --------------------------------------------------------------------
+  # OPENSEARCH (Graylog storage)
+  # --------------------------------------------------------------------
+  opensearch:
+    image: opensearchproject/opensearch:2
+    container_name: graylog-opensearch
+    restart: unless-stopped
+    networks:
+      - back-tier
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g
+      - DISABLE_SECURITY_PLUGIN=true
+    volumes:
+      - ./db/opensearch:/usr/share/opensearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  # --------------------------------------------------------------------
+  # GRAYLOG
+  # --------------------------------------------------------------------
+  graylog:
+    image: graylog/graylog:5.2
+    container_name: graylog
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - opensearch
+    networks:
+      - back-tier
+      - satory_net
+    ports:
+      - "9000:9000"   # Web UI
+      - "1514:1514/udp" # Syslog
+      - "12201:12201/udp" # GELF
+    environment:
+      - TZ=Asia/Almaty
+
+      # пароль admin
+      - GRAYLOG_ROOT_PASSWORD_SHA2=d54c3472c4b97c51c093577a16ea37b9870c85b303698f505fd0caf1c5b74993
+
+      # секрет
+      - GRAYLOG_PASSWORD_SECRET=someverylongrandomstring
+
+      # backend
+      - GRAYLOG_MONGODB_URI=mongodb://mongodb:27017/graylog
+      - GRAYLOG_ELASTICSEARCH_HOSTS=http://opensearch:9200
+
+      # веб
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://graylog.satory.kz/
+    volumes:
+      - ./db/graylog:/usr/share/graylog/data
 
   nginx:
     image: nginx:1.25-alpine
