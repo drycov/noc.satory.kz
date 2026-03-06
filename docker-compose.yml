@@ -356,7 +356,7 @@ services:
       - GRAYLOG_ROOT_PASSWORD_SHA2=d54c3472c4b97c51c093577a16ea37b9870c85b303698f505fd0caf1c5b74993
 
       # секрет
-      - GRAYLOG_PASSWORD_SECRET=someverylongrandomstring
+      - GRAYLOG_PASSWORD_SECRET=1qaZ2wsX3edC*
 
       # backend
       - GRAYLOG_MONGODB_URI=mongodb://mongodb:27017/graylog
@@ -364,6 +364,8 @@ services:
 
       # веб
       - GRAYLOG_HTTP_EXTERNAL_URI=http://graylog.satory.kz/
+
+      - GRAYLOG_MESSAGE_JOURNAL_MAX_SIZE=2048mb
     volumes:
       - graylog_data:/usr/share/graylog/data
 
