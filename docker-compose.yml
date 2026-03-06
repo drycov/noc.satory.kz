@@ -356,7 +356,7 @@ services:
       - GRAYLOG_ROOT_PASSWORD_SHA2=d54c3472c4b97c51c093577a16ea37b9870c85b303698f505fd0caf1c5b74993
 
       # секрет
-      - GRAYLOG_PASSWORD_SECRET=1qaZ2wsX3edC*
+      - GRAYLOG_PASSWORD_SECRET=IetGTkAEgJFa2Ywx
 
       # backend
       - GRAYLOG_MONGODB_URI=mongodb://mongodb:27017/graylog
