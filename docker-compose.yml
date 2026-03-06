@@ -188,8 +188,8 @@ services:
         - NET_RAW
 
   oxidized:
-    # image: docker.io/oxidized/oxidized:latest
-    build: ./oxidized
+    image: docker.io/oxidized/oxidized:latest
+    # build: ./oxidized
     container_name: oxidized
     restart: always
     networks: [back-tier]
@@ -201,7 +201,7 @@ services:
       # - ./config:/root/.config/oxidized
       # - ./db/oxidized:/opt/oxidized/configs.git
       - oxidized_data:/root/.config/oxidized
-      # - ./oxidized-config/config:/root/.config/oxidized/config:ro
+      - ./oxidized-config/config:/home/oxidized/.config/oxidized/config:ro
       # - ./oxidized-config/ssh/config:/home/oxidized/.ssh/config:ro
 
 
