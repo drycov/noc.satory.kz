@@ -1,12 +1,9 @@
-
 FROM debian:trixie-slim
 
-# Создать пользователя oxidized с UID 30000
 RUN groupadd -g 30000 -r oxidized && \
   useradd -u 30000 -r -m -d /home/oxidized -g oxidized oxidized && \
   chsh -s /bin/bash oxidized
 
-# Установить необходимые пакеты
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ruby ruby-dev \
     git openssh-client bash ca-certificates curl \
@@ -19,18 +16,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /home/oxidized
 
-# Копировать исходники
 COPY . /home/oxidized/
 
-# Установить bundler и зависимости
-RUN gem install bundler -N && bundle install --jobs=4 --retry=3
+RUN sed -i 's/\r$//' /home/oxidized/entrypoint.sh && \
+    chmod +x /home/oxidized/entrypoint.sh && \
+    mkdir -p /home/oxidized/.config/oxidized && \
+    chown -R oxidized:oxidized /home/oxidized
 
-# Создать директорию для конфигов
-RUN mkdir -p /home/oxidized/.config/oxidized && chown -R oxidized:oxidized /home/oxidized/.config/oxidized
+RUN gem install bundler -N && bundle install --jobs=4 --retry=3
 
 EXPOSE 8888
 
-# Запускать от пользователя oxidized
 USER oxidized
 
 ENTRYPOINT ["/home/oxidized/entrypoint.sh"]
