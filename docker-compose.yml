@@ -361,7 +361,7 @@ services:
       # backend
       - GRAYLOG_MONGODB_URI=mongodb://mongodb:27017/graylog
       - GRAYLOG_ELASTICSEARCH_HOSTS=http://opensearch:9200
-
+      - GRAYLOG_HTTP_BIND_ADDRESS=0.0.0.0:9000
       # веб
       - GRAYLOG_HTTP_EXTERNAL_URI=http://graylog.satory.kz/
 
