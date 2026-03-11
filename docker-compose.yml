@@ -431,6 +431,8 @@ services:
     environment:
       - TZ=${TZ}
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_PUBLICBASEURL=http://kibana.satory.kz
+
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:5601 >/dev/null 2>&1 || exit 1"]
       interval: 30s
@@ -482,6 +484,7 @@ services:
       - grafana
       - oxidized
       - graylog
+      - kibana
   
 
 volumes:
